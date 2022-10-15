@@ -1,0 +1,5 @@
+[workspace]
+members = [
+  "pm3_cli",
+  "pm3_daemon",
+]
