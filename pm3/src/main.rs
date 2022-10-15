@@ -31,6 +31,7 @@ fn main() {
         Some(("start", sub_matches)) => {
             let command = sub_matches.get_one::<String>("COMMAND").unwrap();
             println!("command: {:?}", command);
+            start_daemon().unwrap();
         }
         Some(("stop", sub_matches)) => {
             let id = sub_matches.get_one::<String>("ID").unwrap();
@@ -41,6 +42,15 @@ fn main() {
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachabe!()
     }
+}
 
-    // Continued program logic goes here...
+fn start_daemon() -> std::io::Result<()> {
+    use std::process::{Command, Stdio};
+    Command::new("pm3d")
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()?
+        .wait()?;
+    Ok(())
 }
