@@ -22,8 +22,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         std::thread::sleep(std::time::Duration::from_millis(5000));
     }
 
-    fs::remove_file(out_path)?;
-    fs::remove_file(err_path)?;
     fs::remove_file(pid_path)?;
 
     Ok(())
