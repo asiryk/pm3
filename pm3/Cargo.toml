@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 clap = "4.0.15"
+pm3_lib = { path = "../pm3_lib" }

@@ -6,5 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+pm3_lib = { path = "../pm3_lib/" }
 daemonize = "0.4.1"
 signal-hook = "0.3.14"

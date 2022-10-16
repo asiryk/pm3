@@ -1,3 +1,5 @@
+use pm3_lib;
+
 // https://docs.rs/clap/latest/clap/_derive/_cookbook/git/index.html
 //
 //
@@ -25,6 +27,7 @@ fn cli() -> Command {
 }
 
 fn main() {
+    pm3_lib::dir::ensure_pm3_home().unwrap();
     let matches = cli().get_matches();
 
     match matches.subcommand() {
