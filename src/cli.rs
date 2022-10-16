@@ -18,5 +18,6 @@ pub fn init_commands() -> Command {
                 .arg(arg!(<ID> "Process index"))
                 .arg_required_else_help(true),
         )
+        .subcommand(Command::new("boot").about("Bootstrap daemon"))
         .subcommand(Command::new("kill").about("Kill daemon and all running processes"))
 }

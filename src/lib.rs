@@ -23,6 +23,15 @@ pub mod dir {
     }
 }
 
+pub mod rpc {
+    #[tarpc::service]
+    pub trait Pm3 {
+        async fn hello(name: String) -> String;
+        async fn ping();
+        async fn kill();
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
