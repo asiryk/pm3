@@ -1,6 +1,8 @@
-[workspace]
-members = [
-  "pm3",
-  "pm3_daemon",
-  "pm3_lib",
-]
+[package]
+name = "pm3"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = "4.0.15"
+daemonize = "0.4.1"

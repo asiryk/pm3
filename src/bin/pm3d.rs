@@ -2,10 +2,9 @@ use std::error::Error;
 use std::fs::{self, File};
 
 use daemonize::Daemonize;
-use pm3_lib;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let home = pm3_lib::dir::ensure_pm3_home()?;
+    let home = pm3::dir::ensure_pm3_home()?;
     let out_path = home.join("pm3d.out");
     let err_path = home.join("pm3d.err");
     let pid_path = home.join("pm3d.pid");

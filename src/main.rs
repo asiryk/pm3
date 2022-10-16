@@ -1,5 +1,3 @@
-use pm3_lib;
-
 // https://docs.rs/clap/latest/clap/_derive/_cookbook/git/index.html
 //
 //
@@ -27,7 +25,7 @@ fn cli() -> Command {
 }
 
 fn main() {
-    pm3_lib::dir::ensure_pm3_home().unwrap();
+    pm3::dir::ensure_pm3_home().unwrap();
     let matches = cli().get_matches();
 
     match matches.subcommand() {
@@ -51,7 +49,7 @@ fn start_daemon() -> std::io::Result<()> {
     use std::process::{Command, Stdio};
     Command::new("pm3d")
         .stdin(Stdio::null())
-        .stdout(Stdio::null())
+        .stdout(Stdio::inherit())
         .stderr(Stdio::null())
         .spawn()?
         .wait()?;
