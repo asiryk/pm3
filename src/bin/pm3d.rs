@@ -3,8 +3,6 @@ use std::error::Error;
 use daemonize::Daemonize;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    println!("daemon: init");
-
     Daemonize::new().start()?;
 
     // Build tokio runtime after daemonizing, otherwise it won't work
@@ -13,7 +11,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         .build()
         .unwrap()
         .block_on(async {
-            println!("daemon: starting server");
             rpc_server::start_rpc_server().await.unwrap();
         });
 

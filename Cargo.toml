@@ -6,7 +6,9 @@ edition = "2021"
 [dependencies]
 clap = "4.0.15"
 daemonize = "0.4.1"
+env_logger = "0.9.1"
 futures = "0.3.24"
+log = "0.4.17"
 serde = "1.0.145"
 tarpc = { version = "0.30.0", features = ["full"] }
 tokio = { version = "1.21.2", features = ["full"] }
