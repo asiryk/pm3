@@ -3,6 +3,10 @@ name = "pm3"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "pm3d"
+path = "src/daemon/main.rs"
+
 [dependencies]
 clap = "4.0.26"
 daemonize = "0.4.1"
