@@ -21,11 +21,19 @@ pub mod dir {
 
         Ok(path)
     }
+
+    pub fn pm3_log_dir() -> Result<PathBuf> {
+        let mut path = ensure_pm3_home()?;
+        path.push("log");
+
+        Ok(path)
+    }
 }
 
 pub mod rpc {
     #[tarpc::service]
     pub trait Pm3 {
+        async fn start(command: String);
         async fn hello(name: String) -> String;
         async fn ping();
         async fn kill();

@@ -1,4 +1,5 @@
 mod cli;
+use std::error::Error;
 use std::net::{IpAddr, Ipv6Addr, SocketAddr};
 
 use log::{error, info, warn};
@@ -14,7 +15,7 @@ async fn main() {
         .filter_level(log::LevelFilter::Info)
         .init();
     pm3::dir::ensure_pm3_home().unwrap();
-    handle_matches().await;
+    handle_matches().await.unwrap();
 }
 
 mod rpc_client {
@@ -75,23 +76,23 @@ async fn start_daemon() -> std::io::Result<()> {
     Ok(())
 }
 
-async fn handle_matches() {
+async fn handle_matches() -> Result<(), Box<dyn Error>> {
     let matches = cli::init_commands().get_matches();
     let addr = SocketAddr::new(IpAddr::V6(Ipv6Addr::LOCALHOST), PORT);
 
     match matches.subcommand() {
         Some(("start", sub_matches)) => {
+            let client = bootsrap(addr).await?;
             let command = sub_matches.get_one::<String>("COMMAND").unwrap();
-            println!("command: {:?}", command);
+            client.start(context::current(), command.clone()).await?;
         }
         Some(("stop", sub_matches)) => {
             let id = sub_matches.get_one::<String>("ID").unwrap();
             println!("id: {:?}", id);
         }
         Some(("boot", _)) => {
-            let client = bootsrap(addr).await;
+            let client = bootsrap(addr).await?;
             info!("client bootstrapped");
-            let client = client.unwrap();
             api_test(&client).await;
         }
         Some(("kill", _)) => {
@@ -113,4 +114,6 @@ async fn handle_matches() {
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachable !()
     }
+
+    Ok(())
 }
