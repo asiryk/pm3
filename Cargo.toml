@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-clap = "4.0.15"
+clap = "4.0.26"
 daemonize = "0.4.1"
-env_logger = "0.9.1"
-futures = "0.3.24"
+env_logger = "0.9.3"
+futures = "0.3.25"
 log = "0.4.17"
-serde = "1.0.145"
-tarpc = { version = "0.30.0", features = ["full"] }
-tokio = { version = "1.21.2", features = ["full"] }
+serde = "1.0.147"
+tarpc = { version = "0.31.0", features = ["full"] }
+tokio = { version = "1.22.0", features = ["full"] }
