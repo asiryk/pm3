@@ -9,3 +9,5 @@ Useful staff:
 - https://rust-lang-nursery.github.io/rust-cookbook/os/external.html
 
 unix domain sockets; communicate via .socket file; inter process communication (ipc)
+
+TODO: when implementing resurrect, client shold save path where command was spawned.
