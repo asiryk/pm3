@@ -1,6 +1,6 @@
 use pm3::rpc::Pm3;
 use std::net::SocketAddr;
-use tarpc::context;
+use tarpc::context::Context;
 
 #[derive(Clone)]
 pub struct Pm3Server(SocketAddr);
@@ -13,7 +13,7 @@ impl Pm3Server {
 
 #[tarpc::server]
 impl Pm3 for Pm3Server {
-    async fn start(self, _: context::Context, command: String) {
+    async fn start(self, _: Context, command: String) {
         use std::io::{BufRead, BufReader};
         use std::process::{Command, Stdio};
 
@@ -34,19 +34,19 @@ impl Pm3 for Pm3Server {
         format!("executed command");
     }
 
-    async fn get_log(self, _: context::Context) -> Vec<String> {
+    async fn get_log(self, context: Context) -> Vec<String> {
         return vec![];
     }
 
-    async fn hello(self, _: context::Context, name: String) -> String {
+    async fn hello(self, _: Context, name: String) -> String {
         format!("Hello, {name}! You are connected from {}", self.0)
     }
 
-    async fn ping(self, _: context::Context) {
+    async fn ping(self, _: Context) {
         ()
     }
 
-    async fn kill(self, _: context::Context) {
+    async fn kill(self, _: Context) {
         println!("daemon: kill");
         std::process::exit(0);
     }

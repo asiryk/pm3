@@ -18,6 +18,7 @@ pub fn init_commands() -> Command {
                 .arg(arg!(<ID> "Process index"))
                 .arg_required_else_help(true),
         )
+        .subcommand(Command::new("log").about("Send std output of the program into the terminal"))
         .subcommand(Command::new("boot").about("Bootstrap daemon"))
         .subcommand(Command::new("kill").about("Kill daemon and all running processes"))
 }

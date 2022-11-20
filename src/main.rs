@@ -35,21 +35,20 @@ mod rpc_client {
 
     pub async fn bootsrap(addr: SocketAddr) -> Result<Pm3Client, Box<dyn Error>> {
         let transport = tcp::connect(addr, Json::default).await;
-        match transport {
-            Ok(transport) => {
-                let client = Pm3Client::new(client::Config::default(), transport).spawn();
-                info!("connected to daemon");
-                return Ok(client);
-            }
-            Err(_) => {
-                info!("daemon is not running, starting it");
-                start_daemon().await?;
-                let transport = tcp::connect(addr, Json::default).await?;
-                let client = Pm3Client::new(client::Config::default(), transport).spawn();
-                info!("connected to daemon");
-                return Ok(client);
-            }
-        }
+        return if let Ok(transport) = transport {
+            let client = Pm3Client::new(client::Config::default(), transport).spawn();
+            info!("connected to daemon");
+
+            Ok(client)
+        } else {
+            info!("daemon is not running, starting it");
+            start_daemon().await?;
+            let transport = tcp::connect(addr, Json::default).await?;
+            let client = Pm3Client::new(client::Config::default(), transport).spawn();
+            info!("connected to daemon");
+
+            Ok(client)
+        };
     }
 
     pub async fn api_test(client: &Pm3Client) {
@@ -94,6 +93,12 @@ async fn handle_matches() -> Result<(), Box<dyn Error>> {
             let client = bootsrap(addr).await?;
             info!("client bootstrapped");
             api_test(&client).await;
+        }
+        Some(("log", _)) => {
+            let client = bootsrap(addr).await?;
+            let ctx = context::current();
+            println!("1. context client");
+            dbg!(ctx);
         }
         Some(("kill", _)) => {
             let client = create_client(addr).await;

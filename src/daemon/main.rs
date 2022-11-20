@@ -1,4 +1,6 @@
 mod impl_service;
+mod pool;
+mod log_buffer;
 
 use daemonize::Daemonize;
 use std::error::Error;
