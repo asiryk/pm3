@@ -34,6 +34,7 @@ pub mod rpc {
     #[tarpc::service]
     pub trait Pm3 {
         async fn start(command: String);
+        async fn get_log() -> Vec<String>;
         async fn hello(name: String) -> String;
         async fn ping();
         async fn kill();
