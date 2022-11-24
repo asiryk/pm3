@@ -21,11 +21,12 @@ impl Process {
 
             // TODO: seems like this thred will live untill process kill
             for line in lines {
-                if let Ok(mut log_buffer) = t_log_buffer.lock() {
-                    log_buffer.write(line);
-                } else {
-                    todo!("do something with error");
-                }
+                let mut log_buffer = match t_log_buffer.lock() {
+                    Ok(i) => i,
+                    Err(i) => i.into_inner(),
+                };
+
+                log_buffer.write(line);
             }
         });
 
@@ -33,11 +34,11 @@ impl Process {
     }
 
     pub fn log(&self, id: &ClientId) -> Vec<String> {
-        if let Ok(mut log_buffer) = self.log_buffer.lock() {
-            return log_buffer.consume_unread(id);
-        } else {
-            todo!("do something with error");
-        }
+        let mut log_buffer = match self.log_buffer.lock() {
+            Ok(i) => i,
+            Err(i) => i.into_inner(),
+        };
+        return log_buffer.consume_unread(id);
     }
 }
 
