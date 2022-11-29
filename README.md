@@ -11,3 +11,4 @@ Useful staff:
 unix domain sockets; communicate via .socket file; inter process communication (ipc)
 
 TODO: when implementing resurrect, client shold save path where command was spawned.
+TODO: don't save commands by value (like pm2). save them at least by folder either (same commands may be run in different directories).
