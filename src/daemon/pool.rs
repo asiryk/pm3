@@ -6,6 +6,7 @@ use std::thread;
 
 use crate::log_buffer::{ClientId, LogBuffer};
 
+// TODO: rewrite with tokio mutex and async
 struct Process {
     child: Child,
     log_buffer: Arc<Mutex<LogBuffer>>,
@@ -58,10 +59,10 @@ impl Pool {
         Pool { processes: vec![] }
     }
 
-    pub fn spawn(&mut self, command: &str, args: Vec<&str>) {
+    pub fn spawn(&mut self, command: &str, args: &[&str]) {
         info!("start '{}'", command);
         let child = Command::new(command)
-            .args(&args)
+            .args(args)
             .stdin(Stdio::null())
             .stderr(Stdio::null())
             .stdout(Stdio::piped())
@@ -115,7 +116,7 @@ mod tests {
     #[ignore]
     fn pool_add() {
         let mut pool = Pool::new();
-        pool.spawn("ping", vec!["127.0.0.1"]);
+        pool.spawn("ping", &["127.0.0.1"]);
         let l = pool.log(0, ClientId(0)).unwrap();
         pool.log(0, ClientId(1)).unwrap();
         println!("{:?}", l);

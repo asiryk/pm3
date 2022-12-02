@@ -1,9 +1,13 @@
 mod impl_service;
-mod pool;
 mod log_buffer;
+mod pool;
 
 use daemonize::Daemonize;
 use std::error::Error;
+use std::sync::Arc;
+use tokio::sync::Mutex;
+
+use crate::pool::Pool;
 
 fn main() -> Result<(), Box<dyn Error>> {
     Daemonize::new().start()?;
@@ -34,12 +38,14 @@ async fn start_server() -> Result<(), Box<dyn Error>> {
     let transport = tarpc::serde_transport::tcp::listen(server_addr, Json::default);
     let mut listener = transport.await?;
     listener.config_mut().max_frame_length(usize::MAX);
+    let pool = Arc::new(Mutex::new(Pool::new()));
     listener
         .filter_map(|r| future::ready(r.ok()))
         .map(server::BaseChannel::with_defaults)
         .max_channels_per_key(1, |t| t.transport().peer_addr().unwrap().ip())
         .map(|channel| {
-            let server = Pm3Server::new(channel.transport().peer_addr().unwrap());
+            let addr = channel.transport().peer_addr().unwrap();
+            let server = Pm3Server::new(addr, Arc::clone(&pool));
             channel.execute(server.serve())
         })
         .buffer_unordered(10)

@@ -82,8 +82,11 @@ async fn handle_matches() -> Result<(), Box<dyn Error>> {
     match matches.subcommand() {
         Some(("start", sub_matches)) => {
             let client = bootsrap(addr).await?;
-            let command = sub_matches.get_one::<String>("COMMAND").unwrap();
-            client.start(context::current(), command.clone()).await?;
+            let command = sub_matches.get_one::<String>("COMMAND").unwrap().clone();
+            let args = vec![format!("127.0.0.1")];
+            client
+                .start(context::current(), command.clone(), args)
+                .await?;
         }
         Some(("stop", sub_matches)) => {
             let id = sub_matches.get_one::<String>("ID").unwrap();
@@ -97,8 +100,10 @@ async fn handle_matches() -> Result<(), Box<dyn Error>> {
         Some(("log", _)) => {
             let client = bootsrap(addr).await?;
             let ctx = context::current();
-            println!("1. context client");
-            dbg!(ctx);
+            let log = client.get_log(ctx).await;
+            if let Ok(log) = log {
+                println!("{:?}", log);
+            }
         }
         Some(("kill", _)) => {
             let client = create_client(addr).await;
